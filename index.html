@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ថ្នាក់ទី 11 O - វិទ្យាល័យនេតយ៉ង់ 🎓</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ថ្នាក់ 11 O">
+  <link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+  <style>
+    @import url('https://googleapis.com');
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #0ea5e9;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-light: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Kantumruy Pro', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: linear-gradient(135deg, var(--primary-dark), var(--secondary)); color: white; padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25); }
+    header h1 { font-size: 26px; margin-bottom: 6px; }
+    header p { font-size: 15px; opacity: 0.95; }
+    .teacher-badge { display: inline-block; background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; font-size: 14px; font-weight: 600; }
+    nav { display: flex; justify-content: center; gap: 8px; background: white; padding: 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.06); flex-wrap: wrap; }
+    nav button { background: transparent; border: none; padding: 8px 16px; border-radius: 20px; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--text-light); cursor: pointer; transition: 0.2s; }
+    nav button.active, nav button:hover { background: var(--primary); color: white; }
+    .container { max-width: 950px; margin: 25px auto; padding: 0 15px; }
+    .section { display: none; animation: fadeIn 0.3s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .card { background: var(--card-bg); border-radius: 16px; padding: 22px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
+    .card h2 { color: var(--primary); font-size: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 10px; }
+    .info-box { background: #eff6ff; padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary); }
+    .info-box span { display: block; font-size: 13px; color: var(--text-light); }
+    .info-box strong { font-size: 16px; color: var(--primary-dark); }
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: center; font-size: 14px; }
+    th, td { padding: 10px 8px; border: 1px solid #cbd5e1; }
+    th { background-color: #dbeafe; color: var(--primary-dark); font-weight: 700; }
+    .session-break { background-color: #f8fafc; font-weight: 700; color: #475569; letter-spacing: 1px; }
+    .subj-code { display: block; font-size: 11px; color: #64748b; }
+    .cleaning-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+    .day-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    .day-header { background: var(--primary); color: white; padding: 10px 15px; font-weight: 700; text-align: center; }
+    .day-list { list-style: none; padding: 12px 15px; }
+    .day-list li { padding: 5px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; }
+    .day-list li:last-child { border-bottom: none; }
+    .search-box { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 15px; margin-bottom: 15px; outline: none; }
+    .search-box:focus { border-color: var(--primary); }
+    .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .student-card { background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px; flex-shrink: 0; }
+    .day-badge { display: inline-block; font-size: 11px; background: #dbeafe; color: var(--primary-dark); padding: 2px 8px; border-radius: 10px; }
+    .dev-card { text-align: center; }
+    .dev-card h2 { justify-content: center; }
+    .qr-wrapper { background: #f8fafc; display: inline-block; padding: 18px; border-radius: 18px; border: 2px dashed #cbd5e1; margin-bottom: 15px; }
+    .qr-wrapper img { width: 190px; height: 190px; border-radius: 12px; display: block; margin: 0 auto 10px; object-fit: cover; }
+    .btn-telegram { display: inline-block; background: #0088cc; color: white; text-decoration: none; padding: 10px 24px; border-radius: 25px; font-weight: 600; box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3); transition: 0.2s; }
+    .btn-telegram:hover { background: #006699; transform: translateY(-2px); }
+    footer { text-align: center; padding: 25px 15px; color: var(--text-light); font-size: 14px; }
+    footer a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎓 ថ្នាក់ទី 11 O - វិទ្យាល័យនេតយ៉ង់</h1>
+    <p>ឆ្នាំសិក្សា ២០២៦ - ២០២៧ | ម៉ោងសរុបប្រចាំសប្តាហ៍៖ ៣២ ម៉ោង</p>
+    <div class="teacher-badge">
+🧑‍🏫 គ្រូបន្ទុកថ្នាក់៖ អ៊ុំ ខឿនបញ្ញាឫទ្ធិ</div>
+  </header>
+  <nav>
+    <button id="nav-schedule" class="active">📅 កាលវិភាគរៀន</button>
+    <button id="nav-cleaning">🧹 វេនបោសសំរាម</button>
+    <button id="nav-students">👥 សមាជិកថ្នាក់ (៤៨ នាក់)</button>
+    <button id="nav-info">ℹ️ ព័ត៌មានថ្នាក់ & អ្នកបង្កើត</button>
+    <button id="nav-attendance">📋 កត់ត្រាវត្តមាន</button>
+  </nav>
+  <div class="container">
+    <div id="schedule" class="section active">
+      <div class="card">
+        <h2>📅 កាលវិភាគសិក្សាប្រចាំសប្តាហ៍ (ថ្នាក់ទី 11 O)</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>ម៉ោង</th><th>ចន្ទ (Mon)</th><th>អង្គារ (Tue)</th><th>ពុធ (Wed)</th><th>ព្រហស្បតិ៍ (Thur)</th><th>សុក្រ (Fri)</th><th>សៅរ៍ (Sat)</th></tr>
+            </thead>
+            <tbody>
+  <tr>
+    <td><strong>7:00 - 8:00</strong></td>
+    <td>អក្សរសាស្ត្រខ្មែរ <span class="s"></span></td>
+    <td>អក្សរសាស្ត្រខ្មែរ <span class="s"></span></td>
+    <td>ផែនដីវិទ្យា <span class="s"></span></td>
+    <td>អក្សរសាស្ត្រខ្មែរ <span class="s"></span></td>
+    <td>ភាសាអង់គ្លេស <span class="s"></span></td>
+    <td>ជីវៈវិទ្យា <span class="s"></span></td>
+  </tr>
+  <tr>
+    <td><strong>8:00 - 9:00</strong></td>
+    <td>អក្សរសាស្ត្រខ្មែរ <span class="s"></span></td>
+    <td>អក្សរសាស្ត្រខ្មែរ <span class="s"></span></td>
+    <td>ផែនដីវិទ្យា <span class="s"></span></td>
+    <td>គណិតវិទ្យា <span class="s"></span></td>
+    <td>ភាសាអង់គ្លេស <span class="s"></span></td>
+    <td>ជីវៈវិទ្យា <span class="s"></span></td>
+  </tr>
+  <tr>
+    <td><strong>9:00 - 10:00</strong></td>
+    <td>រូបវិទ្យា <span class="s"></span></td>
+    <td>កសិកម្ម <span class="s"></span></td>
+    <td>ប្រវត្តិវិទ្យា <span class="s"></span></td>
+    <td>ភូមិវិទ្យា <span class="s"></span></td>
+    <td>ព័ត៌មានវិទ្យា <span class="s"></span></td>
+    <td> <span class="s"></span></td>
+  </tr>
+  <tr>
+    <td><strong>10:00 - 11:00</strong></td>
+    <td>រូបវិទ្យា <span class="s"></span></td>
+    <td>សីលធម៌-ពលរដ្ឋ <span class="s"></span></td>
+    <td>ប្រវត្តិវិទ្យា <span class="s"></span></td>
+    <td>ភូមិវិទ្យា <span class="s"></span></td>
+    <td>ព័ត៌មានវិទ្យា <span class="s"></span></td>
+    <td> <span class="s"></span></td>
+  </tr>
+  <tr>
+    <td colspan="7" class="session-break">☀️ ពេលរសៀល ☀️</td>
+  </tr>
+  <tr>
+    <td><strong>2:00 - 3:00</strong></td>
+    <td>គីមីវិទ្យា <span class="s"></span></td>
+    <td>បណ្ណាល័យ <span class="s"></span></td>
+    <td>គណិតវិទ្យា <span class="s"></span></td>
+    <td>កីឡា <span class="s"></span></td>
+    <td>សីលធម៌-ពលរដ្ឋ <span class="s"></span></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>3:00 - 4:00</strong></td>
+    <td>គីមីវិទ្យា <span class="s"></span></td>
+    <td>បណ្ណាល័យ <span class="s"></span></td>
+    <td>គណិតវិទ្យា <span class="s"></span></td>
+    <td>កីឡា <span class="s"></span></td>
+    <td>សីលធម៌-ពលរដ្ឋ <span class="s"></span></td>
+    <td></td>
+  </tr>
+</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="cleaning" class="section">
+      <div class="card">
+        <h2>🧹 តារាងវេនបោសសំរាមប្រចាំសប្តាហ៍</h2>
+        <div class="cleaning-grid" id="cleaningContainer"></div>
+      </div>
+    </div>
+    <div id="students" class="section">
+      <div class="card">
+        <h2>👥 បញ្ជីឈ្មោះសិស្សថ្នាក់ទី 11 O</h2>
+        <input type="text" class="search-box" id="searchInput" placeholder="🔍 វាយឈ្មោះសិស្ស ឬថ្ងៃវេនបោសសំរាមដើម្បីស្វែងរក...">
+        <div class="student-grid" id="studentList"></div>
+      </div>
+    </div>
+    <div id="info" class="section">
+      <div class="card">
+        <h2>ℹ️ ព័ត៌មានទូទៅរបស់ថ្នាក់</h2>
+        <div class="info-grid">
+          <div class="info-box"><span>សាលារៀន</span><strong>វិទ្យាល័យ នេត យ៉ង់</strong></div>
+          <div class="info-box"><span>កម្រិតថ្នាក់</span><strong>ថ្នាក់ទី 11 O</strong></div>
+          <div class="info-box"><span>គ្រូបន្ទុកថ្នាក់</span><strong>អ៊ំ ខឿនបញ្ញារិទ្ធ</strong></div>
+          <div class="info-box"><span>ម៉ោងសិក្សាសរុប</span><strong>៣២ ម៉ោង / សប្តាហ៍</strong></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 20px;">
+    <h2>👑 គណៈកម្មការថ្នាក់ទី ១១ O</h2>
+    <div class="info-grid">
+      <div class="info-box">
+        <span>ប្រធានថ្នាក់ទី ១</span>
+        <strong>សែម សុភ័ក្រ</strong>
+      </div>
+      <div class="info-box">
+        <span>អនុប្រធានថ្នាក់</span>
+        <strong>សារឿន ស្រីណេ</strong>
+      </div>
+      <div class="info-box">
+        <span>អនុប្រធានថ្នាក់</span>
+        <strong>សុខ រស្មី</strong>
+      </div>
+    </div>
+  </div>
+      <div class="card dev-card">
+        <h2>💻 អ្នកបង្កើតគេហទំព័រ (Website Developer)</h2>
+        <p style="margin-bottom: 15px; color: #475569;">អភិវឌ្ឍ និងរចនាឡើងដោយ <strong>រតនា (Roth)</strong> — សិស្សថ្នាក់ទី 11 O</p>
+        <div class="qr-wrapper">
+       <img src="tg-qr.png" alt="Telegram QR @ROTHZ09" style="width: 180px; height: 180px; object-fit: cover; border-radius: 16px;">
+          <div style="font-weight: 700; color: #0088cc; font-size: 16px;">@ROTHZ09</div>
+          <div style="font-size: 12px; color: #64748b;">ស្កេន QR Code ដើម្បីទាក់ទងតាម Telegram</div>
+        </div>
+        <br>
+        <a href="https://t.me/ROTHZ09" target="_blank" class="btn-telegram">✈️ ឆាតទៅកាន់ Telegram (@ROTHZ09)</a>
+      </div>
+    </div>
+    <div id="attendance" class="section">
+  <div class="card">
+    <h2>📋 កត់ត្រាវត្តមានប្រចាំថ្ងៃ - ថ្នាក់ទី ១១ O</h2>
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+      <select id="sessionSelect" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+        <option value="ពេលព្រឹក">☀️ វេនព្រឹក</option>
+        <option value="ពេលរសៀល">🌤️ វេនរសៀល</option>
+      </select>
+      
+      <button onclick="copyAttendance()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold;">
+        📋 ចម្លងរបាយការណ៍ (Copy)
+      </button>
+
+      <button onclick="resetAttendance()" style="background: #ef4444; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-family: inherit;">
+        🔄 សម្អាត (Reset)
+      </button>
+    </div>
+
+    <div id="attendanceList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px;"></div>
+  </div>
+</div>>
+  </div>
+  <footer>
+    បង្កើតគេហទំព័រដោយ 💻 <a href="https://t.me/ROTHZ09" target="_blank">រតនា (@ROTHZ09)</a> | សម្រាប់ថ្នាក់ទី 11 O វិទ្យាល័យនេតយ៉ង់ (ឆ្នាំសិក្សា ២០២៥-២០២៥)
+  </footer>
+  <script>
+    const cleaningSchedule = [
+      { 
+    day: "ថ្ងៃចន្ទ", 
+    students: ["ជា យីមចូវ", "សែម សុភ័ក្រ", "រ៉យ រ៉ាយុ", "ស៊ុន ស្រីយ៉ា", "ស៊ុយ តាំងអេង", "សាវ៉ែន មាលី", "សាំង ថារិទ្ធ", "សឿន សៀកអុី"] 
+  },
+  { 
+    day: "ថ្ងៃអង្គារ", 
+    students: ["សាង និស្ស័យ", "ផា បញ្ញា", "រ៉យ ប៉ាណាន់", "ស៊ុន សារ៉ានយ៉ា", "សិទ្ធ កញ្ញាវត្តី", "សុខ រស្មី", "សុខ វណ្ណៈ", "សែន មាន", "សៃ ដេវីដ"] 
+  },
+  { 
+    day: "ថ្ងៃពុធ", 
+    students: ["សាវឿត សារ៉ាត់", "សុខ វិសាល", "សុគុណ កាណា", "សូ ស្រីលុច", "សូត យ៉ាទី", "សួម រចនា", "ឡែម ស្រីណាន"] 
+  },
+  { 
+    day: "ថ្ងៃព្រហស្បតិ៍", 
+    students: ["សាមុត រត្តនី", "សុខ ច័ន្ទភារ៉ា", "សុខណា នីតឆាណាត់", "សូត្រ ជីវ័នដារ៉ាន់", "សឿន វាសនា", "ស្រី អិនជី", "ស្រេង គឹមអុីមីង", "ហ៊ាង គីមឡៅ"] 
+  },
+  { 
+    day: "ថ្ងៃសុក្រ", 
+    students: ["ស៊ួ ថារិទ្ធ", "សារ៉ា អុីលិញ", "សារឿន ស្រីណេ", "សុក សុម៉ាលី", "សុខ ភីនុត", "សុខ រតនា", "សំណាង វណ្ណដាវ", "សំណាង សុខហៃ"] 
+  },
+  { 
+    day: "ថ្ងៃសៅរ៍", 
+    students: ["សុខលេង ជីអឺ", "សុគន្ធ សេដ្ឋាថេត", "សេង ប៊ុនហៃ", "សេង ព្រីយ៉ា", "សេង លក្ខិណា", "ស្មាន ចាសស្មីន", "ហម គឹមឈៀង", "សំណាង ស្រីកែវ"] 
+  }
+];
+    const cleaningContainer = document.getElementById('cleaningContainer');
+    const studentListContainer = document.getElementById('studentList');
+    for (let d = 0; d < cleaningSchedule.length; d++) {
+      const item = cleaningSchedule[d];
+      const dayCard = document.createElement('div');
+      dayCard.className = 'day-card';
+      let listHTML = '';
+      for (let s = 0; s < item.students.length; s++) {
+        const name = item.students[s];
+        listHTML += '<li><span>' + (s + 1) + '. ' + name + '</span></li>';
+        const sCard = document.createElement('div');
+        sCard.className = 'student-card';
+        sCard.innerHTML = '<div class="avatar">' + name.charAt(0) + '</div><div><strong>' + name + '</strong><br><span class="day-badge">វេន៖ ' + item.day + '</span></div>';
+        studentListContainer.appendChild(sCard);
+      }
+      dayCard.innerHTML = '<div class="day-header">' + item.day + ' (' + item.students.length + ' នាក់)</div><ul class="day-list">' + listHTML + '</ul>';
+      cleaningContainer.appendChild(dayCard);
+    }
+    function openTab(tabId, btnId) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById(btnId).classList.add('active');
+    }
+    document.getElementById('nav-schedule').addEventListener('click', () => openTab('schedule', 'nav-schedule'));
+    document.getElementById('nav-cleaning').addEventListener('click', () => openTab('cleaning', 'nav-cleaning'));
+    document.getElementById('nav-students').addEventListener('click', () => openTab('students', 'nav-students'));
+    document.getElementById('nav-info').addEventListener('click', () => openTab('info', 'nav-info'));
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const input = this.value.toLowerCase();
+      document.querySelectorAll('.student-card').forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? 'flex' : 'none';
+      });
+    });
+    // ១. ភ្ជាប់ប៊ូតុង "កត់ត្រាវត្តមាន" ឱ្យចុចប្តូរផ្ទាំងបាន
+document.getElementById("nav-attendance").addEventListener("click", function() {
+  document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
+  document.getElementById("attendance").classList.add("active");
+  this.classList.add("active");
+});
+
+// ២. បញ្ជីឈ្មោះសិស្ស (បំពេញឈ្មោះឱ្យគ្រប់ ៣២ នាក់នៅទីនេះ)
+const classStudents = cleaningSchedule.flatMap(item => item.students);
+
+let attendanceStatus = {};
+
+function renderAttendance() {
+  const container = document.getElementById("attendanceList");
+  if (!container) return;
+  container.innerHTML = "";
+
+  classStudents.forEach((name, index) => {
+    const status = attendanceStatus[name] || "វត្តមាន";
+    const bg = status === "ច្បាប់" ? "#fef3c7" : status === "ឥតច្បាប់" ? "#fee2e2" : "#f8fafc";
+
+      container.innerHTML += 
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: ' + bg + ';">' +
+        '<span><strong>' + (index + 1) + '.</strong> ' + name + '</span>' +
+        '<div style="display: flex; gap: 5px;">' +
+          '<button onclick="setStatus(\'' + name + '\', \'ច្បាប់\')" style="background: ' + (status === 'ច្បាប់' ? '#d97706' : '#e2e8f0') + '; color: ' + (status === 'ច្បាប់' ? 'white' : 'black') + '; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 12px;">ច្បាប់</button>' +
+          '<button onclick="setStatus(\'' + name + '\', \'ឥតច្បាប់\')" style="background: ' + (status === 'ឥតច្បាប់' ? '#dc2626' : '#e2e8f0') + '; color: ' + (status === 'ឥតច្បាប់' ? 'white' : 'black') + '; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 12px;">ឥតច្បាប់</button>' +
+        '</div>' +
+      '</div>';
+  });
+}
+
+function setStatus(name, type) {
+  if (attendanceStatus[name] === type) {
+    delete attendanceStatus[name];
+  } else {
+    attendanceStatus[name] = type;
+  }
+  renderAttendance();
+}
+
+function resetAttendance() {
+  attendanceStatus = {};
+  renderAttendance();
+}
+
+function copyAttendance() {
+  const session = document.getElementById("sessionSelect").value;
+  const today = new Date().toLocaleDateString('km-KH');
+  let permissionList = [];
+  let absentList = [];
+
+  for (const [name, status] of Object.entries(attendanceStatus)) {
+    if (status === "ច្បាប់") permissionList.push(name);
+    if (status === "ឥតច្បាប់") absentList.push(name);
+  }
+
+  let report = "📋 របាយការណ៍វត្តមានថ្នាក់ទី ១១ O\n📅 ថ្ងៃទី៖ " + today + " (" + session + ")\n";
+  report += "👥 សិស្សសរុប៖ " + classStudents.length + " នាក់\n";
+  report += "❌ អវត្តមានសរុប៖ " + (permissionList.length + absentList.length) + " នាក់\n\n";
+  report += "🟡 សុំច្បាប់ (" + permissionList.length + " នាក់)៖ " + (permissionList.length > 0 ? permissionList.join(", ") : "គ្មាន") + "\n";
+  report += "🔴 ឥតច្បាប់ (" + absentList.length + " នាក់)៖ " + (absentList.length > 0 ? absentList.join(", ") : "គ្មាន") + "`";
+
+  navigator.clipboard.writeText(report).then(() => {
+    alert("✅ បានចម្លងរបាយការណ៍រួចរាល់! អ្នកអាច Paste ចូល Telegram បានភ្លាមៗ។");
+  });
+renderAttendance();}
+  </script>
+</body>
+</html>
